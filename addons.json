@@ -1,0 +1,71 @@
+{
+  "channel": {
+    "name": "しぐれと",
+    "tagline": "マイクラ統合版の自作アドオンを配布しています。",
+    "youtube": "https://www.youtube.com/channel/UC7pdbRUdqYwNJj5nZ2RwyUg"
+  },
+  "addons": [
+    {
+      "id": "boomerang",
+      "number": 1,
+      "name": "ブーメラン",
+      "catch": "敵をロックオンして一掃し、アイテムを拾って戻ってくる武器",
+      "version": "1.2.2",
+      "updated": "2026-10-28",
+      "minecraft": "1.21.90",
+      "thumb": "boomerang_thumb.jpg",
+      "video": "https://www.youtube.com/channel/UC7pdbRUdqYwNJj5nZ2RwyUg",
+      "download": { "file": "Boomerang.mcaddon", "size": "79KB" },
+      "howto": [
+        ["長押し", "ブーメランを持って長押ししながら、敵を見るとロックオン（最大10体）"],
+        ["離す", "手を離すと、ロックオンした敵に次々と飛んでいく"],
+        ["タップ", "短くタップすると、前に投げて近くの敵を自動で狙う"]
+      ],
+      "features": [
+        "ゾンビやスケルトンなどの雑魚敵は一撃",
+        "強い敵には1回当てたら、すぐ手元に戻ってくる",
+        "落ちているアイテムや経験値を拾って持ち帰る",
+        "夜は刃と軌跡が光る",
+        "牛や羊などにもロックオンできる（自分のペットは狙わない）",
+        "サバイバルでも使える（耐久250回・鉄インゴットで修理）"
+      ],
+      "gallery": [
+        { "src": "boomerang_lock.jpg", "caption": "長押しでロックオン" },
+        { "src": "boomerang_fulllock.jpg", "caption": "群れをまとめて FULL LOCK" },
+        { "src": "boomerang_night.jpg", "caption": "夜は刃と軌跡が光る" },
+        { "src": "boomerang_golem.jpg", "caption": "強い敵には1回当てて戻る" }
+      ],
+      "recipe": {
+        "grid": ["stick", null, "stick", "iron", null, "iron", null, "diamond", null],
+        "result": "boomerang",
+        "items": {
+          "stick": { "name": "棒", "icon": "items_stick.png" },
+          "iron": { "name": "鉄インゴット", "icon": "items_iron.png" },
+          "diamond": { "name": "ダイヤモンド", "icon": "items_diamond.png" },
+          "boomerang": { "name": "ブーメラン", "icon": "items_boomerang.png" }
+        }
+      }
+    }
+  ],
+  "worlds": [
+    {
+      "id": "training",
+      "name": "訓練用ワールド",
+      "catch": "ボタンを押すと燃えないゾンビが出てくる、武器を試すためのワールド",
+      "version": "1.2.0",
+      "updated": "2026-10-28",
+      "minecraft": "1.21.90",
+      "thumb": "training_arena.jpg",
+      "download": { "file": "training_world.mcworld", "size": "21KB" },
+      "features": [
+        "ボタンでゾンビを1体・5体・10体呼び出せる",
+        "動かない的のゾンビ、HP100のタフなゾンビも出せる",
+        "昼と夜をボタンで切り替え",
+        "片付けボタンでゾンビと落ちたアイテムを全部消す",
+        "レシピ部屋：アドオンを入れると、額縁でレシピを展示",
+        "サバイバル ⇄ クリエイティブの切り替えボタン"
+      ],
+      "note": "アドオンは入っていません。試したいアドオンを、ワールドの設定から追加して使ってください。"
+    }
+  ]
+}

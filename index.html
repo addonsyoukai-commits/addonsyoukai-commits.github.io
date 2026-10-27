@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>しぐれとのアドオン置き場</title>
+<meta name="description" content="マイクラ統合版の自作アドオン配布ページ。ブーメランなどのアドオンと、武器を試せる訓練用ワールドをダウンロードできます。">
+<meta property="og:title" content="しぐれとのアドオン置き場">
+<meta property="og:description" content="マイクラ統合版の自作アドオンを配布しています。">
+<meta property="og:image" content="boomerang_thumb.jpg">
+<meta name="theme-color" content="#151833">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap">
+<style>
+/* レイアウト：一覧ページ → アドオンごとの個別ページ。個別ページは「ダウンロード → 入れ方 → 使い方 → 詳細」の順 */
+:root {
+  --bg: #f4f3fa;
+  --panel: #ffffff;
+  --panel-2: #ebe9f5;
+  --fg: #16182b;
+  --muted: #55587a;
+  --line: #d6d3e8;
+  --dusk: #d9610f;        /* 夕焼けのオレンジ（ボタン） */
+  --dusk-ink: #ffffff;
+  --glow: #0a7fa1;        /* ブーメランの水色 */
+  --ok: #1f8a4c;
+  --font-pixel: "DotGothic16", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141730; --panel: #1d2145; --panel-2: #272c58; --fg: #f1f2ff; --muted: #b0b4da;
+    --line: #353b72; --dusk: #ff9a3c; --dusk-ink: #1b1206; --glow: #66e4ff; --ok: #5fd88f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141730; --panel: #1d2145; --panel-2: #272c58; --fg: #f1f2ff; --muted: #b0b4da;
+  --line: #353b72; --dusk: #ff9a3c; --dusk-ink: #1b1206; --glow: #66e4ff; --ok: #5fd88f; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-weight: 500; font-size: 17px; line-height: 1.8;
+}
+a { color: var(--glow); }
+img { max-width: 100%; height: auto; display: block; }
+h1, h2, h3 { text-wrap: balance; }
+.wrap {
+  max-width: 760px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.pix { font-family: var(--font-pixel); font-weight: 400; }
+
+/* ---------- ヘッダー ---------- */
+.top { border-bottom: 1px solid var(--line); background: var(--panel); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); min-width: 0; }
+.brand img { width: 30px; height: 30px; image-rendering: pixelated; }
+.brand span { font-family: var(--font-pixel); font-size: 1.15rem; white-space: nowrap; }
+.yt {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; white-space: nowrap;
+  font-weight: 700; font-size: .85rem; color: var(--fg);
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px;
+}
+.yt i { width: 12px; height: 10px; background: #ff3b30; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+/* ---------- 一覧ページ ---------- */
+.hello { padding-block: 32px 4px; }
+.hello h1 { margin: 0; font-family: var(--font-pixel); font-weight: 400; font-size: clamp(1.8rem, 7vw, 2.6rem); line-height: 1.3; }
+.hello h1 em { font-style: normal; color: var(--dusk); }
+.hello p { margin: 6px 0 0; color: var(--muted); }
+
+.group { margin-top: 32px; }
+.group > h2 { margin: 0 0 4px; font-size: 1.25rem; font-weight: 900; }
+.group > p { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
+.cards { display: grid; gap: 14px; }
+.card {
+  display: grid; grid-template-columns: 200px 1fr; align-items: center;
+  text-decoration: none; color: var(--fg); background: var(--panel);
+  border: 2px solid var(--line); border-radius: 12px; overflow: hidden;
+}
+.card:hover { border-color: var(--glow); }
+.card img { width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.card .body { padding: 12px 16px; min-width: 0; }
+.card .no { font-family: var(--font-pixel); color: var(--dusk); font-size: .85rem; }
+.card h3 { margin: 0; font-size: 1.3rem; font-weight: 900; line-height: 1.4; }
+.card p { margin: 4px 0 0; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+.card .go { margin-top: 6px; font-weight: 700; color: var(--glow); font-size: .9rem; }
+@media (max-width: 560px) {
+  .card { grid-template-columns: 1fr; }
+  .card img { height: auto; }
+}
+
+/* ---------- 個別ページ ---------- */
+.back { display: inline-block; margin-top: 20px; font-weight: 700; text-decoration: none; }
+.page-head { margin-top: 12px; }
+.page-head .no { font-family: var(--font-pixel); color: var(--dusk); }
+.page-head h1 { margin: 0; font-family: var(--font-pixel); font-weight: 400; font-size: clamp(2rem, 8vw, 2.8rem); line-height: 1.25; }
+.page-head p { margin: 4px 0 0; font-size: 1.05rem; }
+.shot { margin-top: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.shot img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+/* ダウンロードの箱：一番目立つ場所 */
+.get {
+  margin-top: 16px; padding: 18px; border-radius: 14px; background: var(--panel);
+  border: 2px solid var(--dusk); display: grid; gap: 12px;
+}
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px; text-align: center;
+  text-decoration: none; border-radius: 10px; padding: 16px 18px;
+  background: var(--dusk); color: var(--dusk-ink); font-weight: 900; font-size: 1.2rem; line-height: 1.4;
+}
+.btn small { font-weight: 700; font-size: .85rem; opacity: .85; }
+.btn:focus-visible, .card:focus-visible, .yt:focus-visible, .back:focus-visible { outline: 3px solid var(--glow); outline-offset: 3px; }
+.req { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .9rem; color: var(--muted); }
+.req b { color: var(--fg); }
+.note-box { margin: 0; padding: 10px 14px; border-radius: 8px; background: var(--panel-2); font-size: .92rem; }
+
+/* 見出し */
+.sec { margin-top: 36px; }
+.sec h2 { margin: 0 0 12px; font-size: 1.3rem; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+.sec h2::before { content: ""; width: 12px; height: 12px; background: var(--glow); flex: none; }
+
+/* 入れ方：番号付きの手順 */
+.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
+.steps li {
+  display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+  counter-increment: s;
+}
+.steps li::before {
+  content: counter(s); font-family: var(--font-pixel); font-size: 1.4rem;
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 8px;
+  background: var(--glow); color: var(--panel);
+}
+.steps div { min-width: 0; line-height: 1.6; }
+.steps b { display: block; font-size: 1.05rem; }
+.steps span { color: var(--muted); font-size: .92rem; }
+
+/* 使い方：操作 → 結果 */
+.howto { margin: 0; display: grid; gap: 10px; }
+.howto div { display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: center; }
+.howto dt {
+  font-family: var(--font-pixel); text-align: center; padding: 8px 0; border-radius: 8px;
+  background: var(--panel-2); color: var(--fg); font-size: 1.05rem;
+}
+.howto dd { margin: 0; min-width: 0; line-height: 1.6; }
+
+.feat { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.feat li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; line-height: 1.6; }
+.feat li::before {
+  content: ""; width: 14px; height: 8px; margin-top: 7px;
+  border-left: 3px solid var(--ok); border-bottom: 3px solid var(--ok); transform: rotate(-45deg);
+}
+
+/* 作業台：マイクラのクラフト画面に寄せたスロット（色はゲーム画面に合わせて固定） */
+.craft {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: #c6c6c6; color: #3f3f3f; padding: 14px 16px; border-radius: 6px; width: fit-content; max-width: 100%;
+  box-shadow: inset 3px 3px 0 #ffffff, inset -3px -3px 0 #555555;
+}
+.grid3 { display: grid; grid-template-columns: repeat(3, 50px); gap: 4px; }
+.slot {
+  width: 50px; height: 50px; background: #8b8b8b; display: grid; place-items: center;
+  box-shadow: inset 2px 2px 0 #373737, inset -2px -2px 0 #ffffff;
+}
+.slot img { width: 36px; height: 36px; image-rendering: pixelated; }
+.slot.big { width: 66px; height: 66px; }
+.slot.big img { width: 48px; height: 48px; }
+.craft .to { font-family: var(--font-pixel); font-size: 1.8rem; color: #555555; }
+.legend { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.legend img { width: 24px; height: 24px; image-rendering: pixelated; }
+
+/* スクリーンショット：横にスワイプ */
+.strip { display: grid; grid-auto-flow: column; grid-auto-columns: min(78%, 360px); gap: 12px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+.strip figure { margin: 0; scroll-snap-align: start; }
+.strip img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+.strip figcaption { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+.hint { font-size: .8rem; color: var(--muted); margin: 4px 0 0; }
+
+.video { display: inline-block; margin-top: 4px; font-weight: 700; }
+
+/* リクエスト */
+.request { margin-top: 44px; padding: 20px; border-radius: 12px; background: var(--panel); border: 2px dashed var(--dusk); }
+.request h2 { margin: 0; font-size: 1.2rem; font-weight: 900; }
+.request p { margin: 6px 0 12px; }
+.request a { display: inline-block; font-weight: 900; text-decoration: none; background: var(--dusk); color: var(--dusk-ink); padding: 10px 18px; border-radius: 8px; }
+
+footer { margin-top: 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; line-height: 1.7; }
+footer .wrap { padding-block: 18px 32px; display: grid; gap: 4px; }
+.loading { color: var(--muted); padding-block: 24px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="favicon.png" alt=""><span>しぐれと</span></a>
+    <a class="yt" id="yt-link" href="https://www.youtube.com/channel/UC7pdbRUdqYwNJj5nZ2RwyUg" target="_blank" rel="noopener"><i></i>YouTube</a>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <p class="loading">読み込み中…</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© しぐれと ／ 配布ファイルの再配布・改造しての配布はご遠慮ください。</span>
+    <span>このサイトと配布物は Mojang Studios・Microsoft の公式のものではありません。Minecraft は Mojang Synergies AB の商標です。</span>
+  </div>
+</footer>
+
+<noscript><p class="wrap">このページの表示には JavaScript が必要です。</p></noscript>
+
+<script>
+const INSTALL_ADDON = [
+  ["ダウンロードする", "上のボタンを押して、ファイルを保存します。"],
+  ["ファイルを開く", "スマホは保存したファイルをタップ、パソコンはダブルクリック。マイクラが開いて自動で読み込まれます。"],
+  ["ワールドで有効にする", "ワールドの設定 →「ビヘイビアパック」と「リソースパック」で、このアドオンを「有効」にします。"]
+];
+const INSTALL_WORLD = [
+  ["ダウンロードする", "上のボタンを押して、ファイルを保存します。"],
+  ["ファイルを開く", "保存したファイルをタップ（ダブルクリック）すると、マイクラのワールド一覧に追加されます。"],
+  ["ワールドに入る", "初めて入ると、数秒で訓練場が自動で建ちます。後ろの壁のボタンでゾンビを呼び出せます。"]
+];
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let DATA = null;
+
+/* ---------- 一覧 ---------- */
+function card(a, label) {
+  return `<a class="card" href="#${esc(a.id)}">
+    <img src="${esc(a.thumb)}" alt="" width="1280" height="720">
+    <div class="body">
+      ${label ? `<span class="no">${esc(label)}</span>` : ""}
+      <h3>${esc(a.name)}</h3>
+      <p>${esc(a.catch)}</p>
+      <div class="go">ダウンロードはこちら →</div>
+    </div>
+  </a>`;
+}
+function home() {
+  const addons = [...DATA.addons].sort((a, b) => b.number - a.number);
+  return `<section class="hello">
+      <h1>しぐれとの<br><em>アドオン置き場</em></h1>
+      <p>${esc(DATA.channel.tagline)}</p>
+    </section>
+    <section class="group">
+      <h2>アドオン</h2>
+      <p>動画で紹介したアドオンです。新しいものほど上にあります。</p>
+      <div class="cards">${addons.map((a) => card(a, `第${a.number}回`)).join("")}</div>
+    </section>
+    <section class="group">
+      <h2>ワールド</h2>
+      <p>アドオンを試すときに使えるワールドです。</p>
+      <div class="cards">${(DATA.worlds || []).map((w) => card(w, "ワールド")).join("")}</div>
+    </section>
+    ${request()}`;
+}
+
+/* ---------- 個別ページ ---------- */
+function getBox(item, kind) {
+  const ext = item.download.file.split(".").pop();
+  return `<div class="get">
+    <a class="btn" href="${esc(item.download.file)}" download>
+      ダウンロード<small>.${esc(ext)}・${esc(item.download.size)}</small>
+    </a>
+    <ul class="req">
+      <li>対応：<b>統合版 ${esc(item.minecraft)} 以降</b></li>
+      <li>バージョン：<b>${esc(item.version)}</b></li>
+      <li>更新：<b>${esc(item.updated)}</b></li>
+    </ul>
+    ${kind === "addon" ? `<p class="note-box">スマホ・タブレット・Windows パソコンで入れられます（Switch などのゲーム機は、ファイルを読み込めません）。実験的機能はオフのままで動きます。</p>` : ""}
+    ${item.note ? `<p class="note-box">${esc(item.note)}</p>` : ""}
+  </div>`;
+}
+function steps(list) {
+  return `<ol class="steps">${list.map(([t, s]) => `<li><div><b>${t}</b><span>${s}</span></div></li>`).join("")}</ol>`;
+}
+function recipe(r) {
+  if (!r) return "";
+  const slot = (k, big) => {
+    const it = k && r.items[k];
+    return `<div class="slot${big ? " big" : ""}">${it ? `<img src="${esc(it.icon)}" alt="${esc(it.name)}" title="${esc(it.name)}">` : ""}</div>`;
+  };
+  const counts = {};
+  r.grid.forEach((k) => { if (k) counts[k] = (counts[k] || 0) + 1; });
+  return `<section class="sec"><h2>レシピ（作業台）</h2>
+    <div class="craft" role="img" aria-label="作業台のレシピ">
+      <div class="grid3">${r.grid.map((k) => slot(k)).join("")}</div>
+      <span class="to" aria-hidden="true">→</span>
+      ${slot(r.result, true)}
+    </div>
+    <ul class="legend">${Object.entries(counts).map(([k, n]) => `<li><img src="${esc(r.items[k].icon)}" alt="">${esc(r.items[k].name)} ×${n}</li>`).join("")}</ul>
+  </section>`;
+}
+function gallery(list) {
+  if (!list || !list.length) return "";
+  return `<section class="sec"><h2>スクリーンショット</h2>
+    <div class="strip">${list.map((g) => `<figure><img src="${esc(g.src)}" alt="${esc(g.caption)}" width="960" height="540"><figcaption>${esc(g.caption)}</figcaption></figure>`).join("")}</div>
+    <p class="hint">横にスワイプすると、ほかの画像も見られます。</p>
+  </section>`;
+}
+function addonPage(a) {
+  return `<a class="back" href="#">← 一覧にもどる</a>
+    <div class="page-head">
+      <span class="no">第${a.number}回</span>
+      <h1>${esc(a.name)}</h1>
+      <p>${esc(a.catch)}</p>
+    </div>
+    <div class="shot"><img src="${esc(a.thumb)}" alt="" width="1280" height="720"></div>
+    ${getBox(a, "addon")}
+    ${a.video ? `<a class="video" href="${esc(a.video)}" target="_blank" rel="noopener">紹介動画を YouTube で見る</a>` : ""}
+    <section class="sec"><h2>入れ方</h2>${steps(INSTALL_ADDON)}</section>
+    ${a.howto ? `<section class="sec"><h2>使い方</h2><dl class="howto">${a.howto.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl></section>` : ""}
+    <section class="sec"><h2>できること</h2><ul class="feat">${a.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul></section>
+    ${recipe(a.recipe)}
+    ${gallery(a.gallery)}
+    ${request()}`;
+}
+function worldPage(w) {
+  return `<a class="back" href="#">← 一覧にもどる</a>
+    <div class="page-head">
+      <span class="no">ワールド</span>
+      <h1>${esc(w.name)}</h1>
+      <p>${esc(w.catch)}</p>
+    </div>
+    <div class="shot"><img src="${esc(w.thumb)}" alt="" width="960" height="540"></div>
+    ${getBox(w, "world")}
+    <section class="sec"><h2>入れ方</h2>${steps(INSTALL_WORLD)}</section>
+    <section class="sec"><h2>できること</h2><ul class="feat">${w.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul></section>
+    ${request()}`;
+}
+function request() {
+  return `<section class="request">
+    <h2>リクエスト募集中</h2>
+    <p>「こんなアドオンがほしい！」を YouTube のコメントで教えてください。動画にして、ここで配布します。</p>
+    <a href="${esc(DATA.channel.youtube)}" target="_blank" rel="noopener">YouTube でリクエストする</a>
+  </section>`;
+}
+
+/* ---------- 画面の切り替え（#boomerang など） ---------- */
+function route() {
+  const id = location.hash.slice(1);
+  const app = document.getElementById("app");
+  const a = DATA.addons.find((x) => x.id === id);
+  const w = (DATA.worlds || []).find((x) => x.id === id);
+  app.innerHTML = a ? addonPage(a) : w ? worldPage(w) : home();
+  document.title = a ? `${a.name}｜しぐれとのアドオン置き場` : w ? `${w.name}｜しぐれとのアドオン置き場` : "しぐれとのアドオン置き場";
+  window.scrollTo(0, 0);
+}
+
+fetch("addons.json", { cache: "no-cache" })
+  .then((r) => r.json())
+  .then((data) => {
+    DATA = data;
+    document.getElementById("yt-link").href = data.channel.youtube;
+    route();
+    window.addEventListener("hashchange", route);
+  })
+  .catch(() => {
+    document.getElementById("app").innerHTML = '<p class="loading">読み込めませんでした。ページを再読み込みしてください。</p>';
+  });
+</script>
+</body>
+</html>
